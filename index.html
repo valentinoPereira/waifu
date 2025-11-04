@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <title>Anime waifu gallery</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌸</text></svg>">
+</head>
+<body>
+    <div class="gallery-header">
+        <h1>Anime waifu gallery</h1>
+        <p id="image-count"></p>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loader-overlay" id="loader-overlay">
+        <div class="loader-content">
+            <div class="spinner"></div>
+            <p class="loader-text">Loading gallery...</p>
+        </div>
+    </div>
+
+    <div class="gallery-container">
+        <div class="gallery-grid" id="gallery-grid">
+            <!-- Images will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-backdrop" id="lightbox-backdrop"></div>
+        <div class="lightbox-content">
+            <button class="lightbox-close" id="lightbox-close">×</button>
+            <div class="lightbox-viewer">
+                <img class="lightbox-image" id="lightbox-image" src="" alt="">
+            </div>
+            <div class="lightbox-metadata collapsed" id="lightbox-metadata">
+                <button class="metadata-toggle" id="metadata-toggle">
+                    <span class="toggle-arrow">▲</span>
+                    <span class="toggle-label">Show Details</span>
+                </button>
+                <div class="metadata-content">
+                    <div class="metadata-prompt" id="metadata-prompt"></div>
+                    <div class="metadata-timestamp" id="metadata-timestamp"></div>
+                </div>
+            </div>
+            <button class="lightbox-nav lightbox-prev" id="lightbox-prev">‹</button>
+            <button class="lightbox-nav lightbox-next" id="lightbox-next">›</button>
+        </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
