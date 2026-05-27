@@ -279,18 +279,11 @@ function handleTouchEnd(event) {
 
 /**
  * Detect swipe direction and navigate accordingly
- * Swipe right = previous image, Swipe left = next image
+ * Swipe left = next image, Swipe right = previous image
  */
 function handleSwipe() {
     const swipeThreshold = 50 // Minimum distance for a swipe
     const diffX = touchStartX - touchEndX
-    const diffY = touchStartY - touchEndY
-
-    // Vertical swipe down to close
-    if (diffY < -swipeThreshold && Math.abs(diffY) > Math.abs(diffX) * 2) {
-        closeLightbox()
-        return
-    }
 
     if (Math.abs(diffX) < swipeThreshold) return // Not a significant swipe
 
