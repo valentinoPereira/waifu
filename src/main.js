@@ -9,6 +9,8 @@ let currentImageIndex = -1
 // Touch/Swipe tracking
 let touchStartX = 0
 let touchEndX = 0
+let touchStartY = 0
+let touchEndY = 0
 
 // DOM Elements
 const galleryGrid = document.getElementById('gallery-grid')
@@ -71,6 +73,7 @@ function renderGallery() {
         // Fallback img element
         const img = document.createElement('img')
         img.setAttribute('data-src', item.image)
+        img.loading = 'lazy'
         img.alt = item.prompt || 'Gallery image'
 
         picture.appendChild(sourceWebp)
@@ -139,7 +142,12 @@ function openLightbox(index) {
     currentImageIndex = index
     updateLightbox()
     lightbox.classList.add('active')
+    lightbox.setAttribute('role', 'dialog')
+    lightbox.setAttribute('aria-modal', 'true')
+    lightbox.setAttribute('aria-label', 'Image viewer')
     document.body.style.overflow = 'hidden'
+    // Focus the close button for accessibility
+    lightboxClose.focus()
 }
 
 /**
@@ -147,6 +155,9 @@ function openLightbox(index) {
  */
 function closeLightbox() {
     lightbox.classList.remove('active')
+    lightbox.removeAttribute('role')
+    lightbox.removeAttribute('aria-modal')
+    lightbox.removeAttribute('aria-label')
     document.body.style.overflow = 'auto'
     currentImageIndex = -1
 }
@@ -158,10 +169,12 @@ function updateLightbox() {
     if (currentImageIndex < 0 || currentImageIndex >= galleryData.length) return
 
     const item = galleryData[currentImageIndex]
-    // Replace .webp with .jpg for modal display
-    const jpgImage = item.image.replace(/\.webp$/i, '.jpg')
-    lightboxImage.src = jpgImage
+    lightboxImage.src = item.image
+    lightboxImage.loading = 'lazy'
     lightboxImage.alt = item.prompt || 'Gallery image'
+    lightboxImage.onerror = () => {
+        lightboxImage.alt = 'Failed to load image'
+    }
 
     metadataPrompt.textContent = item.prompt || 'No prompt available'
 
@@ -226,6 +239,22 @@ function handleKeydown(event) {
             prevImage()
             event.preventDefault()
             break
+        case 'Tab':
+            // Trap focus inside lightbox
+            const focusable = lightbox.querySelectorAll(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            )
+            if (focusable.length === 0) break
+            const first = focusable[0]
+            const last = focusable[focusable.length - 1]
+            if (event.shiftKey && document.activeElement === first) {
+                last.focus()
+                event.preventDefault()
+            } else if (!event.shiftKey && document.activeElement === last) {
+                first.focus()
+                event.preventDefault()
+            }
+            break
     }
 }
 
@@ -235,6 +264,7 @@ function handleKeydown(event) {
 function handleTouchStart(event) {
     if (!lightbox.classList.contains('active')) return
     touchStartX = event.changedTouches[0].screenX
+    touchStartY = event.changedTouches[0].screenY
 }
 
 /**
@@ -243,6 +273,7 @@ function handleTouchStart(event) {
 function handleTouchEnd(event) {
     if (!lightbox.classList.contains('active')) return
     touchEndX = event.changedTouches[0].screenX
+    touchEndY = event.changedTouches[0].screenY
     handleSwipe()
 }
 
@@ -252,11 +283,18 @@ function handleTouchEnd(event) {
  */
 function handleSwipe() {
     const swipeThreshold = 50 // Minimum distance for a swipe
-    const difference = touchStartX - touchEndX
+    const diffX = touchStartX - touchEndX
+    const diffY = touchStartY - touchEndY
 
-    if (Math.abs(difference) < swipeThreshold) return // Not a significant swipe
+    // Vertical swipe down to close
+    if (diffY < -swipeThreshold && Math.abs(diffY) > Math.abs(diffX) * 2) {
+        closeLightbox()
+        return
+    }
 
-    if (difference > 0) {
+    if (Math.abs(diffX) < swipeThreshold) return // Not a significant swipe
+
+    if (diffX > 0) {
         // Swiped left - go to next image
         nextImage()
     } else {

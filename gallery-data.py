@@ -19,8 +19,6 @@ def generate_gallery_data():
         return
 
     # Get all image files (prefer WebP, fallback to JPG)
-    image_stems = set()
-
     # Collect all WebP files
     webp_files = {f.stem: "webp" for f in images_dir.glob("*.webp")}
     # Collect all JPG files

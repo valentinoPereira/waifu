@@ -12,7 +12,7 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    background: linear-gradient(135deg, #0a0a0a 0%, #1a0033 50%, #330066 100%) !important;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a0033 50%, #330066 100%);
     min-height: 100vh;
     padding: 20px;
     color: white;
@@ -78,7 +78,7 @@ body {
 }
 
 .gallery-item.loading {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background: linear-gradient(90deg, #1a1a2e 25%, #2a1a3e 50%, #1a1a2e 75%);
     background-size: 200% 100%;
     animation: loading 1.5s infinite;
 }
@@ -86,6 +86,7 @@ body {
 .gallery-item.loading img {
     filter: blur(8px);
     opacity: 0;
+    transition: opacity 0.4s ease, filter 0.4s ease;
 }
 
 @keyframes loading {
@@ -264,7 +265,7 @@ body {
 }
 
 .lightbox-metadata.collapsed {
-    max-height: 46px;
+    max-height: 2.8em;
 }
 
 .lightbox-metadata.expanded {
@@ -304,7 +305,7 @@ body {
 .metadata-content {
     padding: 16px 20px 20px 20px;
     overflow-y: auto;
-    max-height: calc(35vh - 46px);
+    max-height: calc(35vh - 2.8em);
     background: rgba(0, 0, 0, 0.85);
 }
 
@@ -315,7 +316,6 @@ body {
 .metadata-prompt {
     line-height: 1.6;
     margin-bottom: 12px;
-    margin-top: 12px;
 }
 
 .metadata-timestamp {
@@ -357,7 +357,6 @@ body {
     background: rgba(255, 255, 255, 0.2);
     border: none;
     color: white;
-    font-size: 2rem;
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -366,9 +365,15 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 0;
     z-index: 1002;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.lightbox-nav svg {
+    display: block;
+    flex-shrink: 0;
 }
 
 .lightbox-nav:hover {
@@ -408,7 +413,7 @@ body {
     }
 
     .lightbox-metadata.collapsed {
-        max-height: 46px;
+        max-height: 2.8em;
     }
 
     .lightbox-metadata.expanded {
@@ -444,6 +449,7 @@ body {
         height: 100vh;
         max-height: 100vh;
         flex-direction: column;
+        padding-bottom: 50px;
     }
 
     .lightbox-viewer {
@@ -468,7 +474,7 @@ body {
     }
 
     .lightbox-metadata.collapsed {
-        max-height: 46px;
+        max-height: 2.8em;
     }
 
     .lightbox-metadata.expanded {
