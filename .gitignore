@@ -44,3 +44,9 @@ public/images/
 Thumbs.db
 
 .vercel
+.vercel
+
+# Local agent config
+.claude/
+CLAUDE.md
+AGENTS.md
